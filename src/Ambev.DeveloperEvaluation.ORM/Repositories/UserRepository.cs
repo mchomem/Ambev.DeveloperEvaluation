@@ -1,6 +1,7 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories;
 
@@ -39,16 +40,19 @@ public class UserRepository : IUserRepository
     /// <param name="id">The unique identifier of the user to delete</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>True if the user was deleted, false if not found</returns>
-    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<User> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var user = await GetByIdAsync(id, cancellationToken);
 
-        if (user == null)
-            return false;
+        if(user!.Address != null )
+        {
+            _context.Addresses.Remove(user.Address);
+        }
+        
+        _context.Users.Remove(user!);
 
-        _context.Users.Remove(user);
         await _context.SaveChangesAsync(cancellationToken);
-        return true;
+        return _context.Entry(user).Entity;
     }
 
     /// <summary>
