@@ -5,7 +5,7 @@ using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
 
-public class Product : BaseEntity
+public sealed class Product : BaseEntity
 {
     public Product()
     {

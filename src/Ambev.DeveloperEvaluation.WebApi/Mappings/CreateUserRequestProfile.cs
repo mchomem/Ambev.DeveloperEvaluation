@@ -1,9 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Auth.AuthenticateUser;
-using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
-using Ambev.DeveloperEvaluation.Application.Users.GetUser;
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
-using Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
-using Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
 using AutoMapper;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Mappings;
@@ -12,9 +8,8 @@ public class CreateUserRequestProfile : Profile
 {
     public CreateUserRequestProfile()
     {
-        CreateMap<CreateUserRequest, CreateUserCommand>();
+        // TODO: revisar o uso destes mapeamentos aqui (se já existem mapeamento em cada operação no CQRS).
         CreateMap<AuthenticateUserRequest, AuthenticateUserCommand>();
         CreateMap<AuthenticateUserResult, AuthenticateUserResponse>();
-        CreateMap<GetUserResult, GetUserResponse>();
     }
 }

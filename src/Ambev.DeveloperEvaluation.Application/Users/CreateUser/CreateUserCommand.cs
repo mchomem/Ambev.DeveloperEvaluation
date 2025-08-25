@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Common.Validation;
+﻿using Ambev.DeveloperEvaluation.Application.Users.Common;
+using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using MediatR;
 
@@ -21,6 +22,11 @@ namespace Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 public class CreateUserCommand : IRequest<CreateUserResult>
 {
     /// <summary>
+    /// Gets or sets the email address for the user.
+    /// </summary>
+    public string Email { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the username of the user to be created.
     /// </summary>
     public string Username { get; set; } = string.Empty;
@@ -31,14 +37,19 @@ public class CreateUserCommand : IRequest<CreateUserResult>
     public string Password { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the phone number for the user.
+    /// Gets or sets the name details for the user.
     /// </summary>
-    public string Phone { get; set; } = string.Empty;
+    public NameCommand Name { get; set; } = new ();
 
     /// <summary>
-    /// Gets or sets the email address for the user.
+    /// Gets or sets the address details for the user.
     /// </summary>
-    public string Email { get; set; } = string.Empty;
+    public AddressCommand Address { get; set; } = new ();
+
+    /// <summary>
+    /// Gets or sets the phone number for the user.
+    /// </summary>
+    public string Phone { get; set; } = string.Empty;    
 
     /// <summary>
     /// Gets or sets the status of the user.

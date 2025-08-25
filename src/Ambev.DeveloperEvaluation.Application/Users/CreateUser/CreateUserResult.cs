@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+﻿using Ambev.DeveloperEvaluation.Application.Users.Common;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 
@@ -18,6 +19,11 @@ public class CreateUserResult
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Gets or sets the email address for the user.
+    /// </summary>
+    public string Email { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the username of the user to be created.
     /// </summary>
     public string Username { get; set; } = string.Empty;
@@ -28,14 +34,19 @@ public class CreateUserResult
     public string Password { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the full name for the user.
+    /// </summary>
+    public NameResult Name { get; set; } = new NameResult();
+
+    /// <summary>
+    /// Gets or sets the address details for the user.
+    /// </summary>
+    public AddressResult Address { get; set; } = new AddressResult();
+
+    /// <summary>
     /// Gets or sets the phone number for the user.
     /// </summary>
     public string Phone { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Gets or sets the email address for the user.
-    /// </summary>
-    public string Email { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the status of the user.

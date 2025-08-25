@@ -1,4 +1,6 @@
+using Ambev.DeveloperEvaluation.Application.Users.Common;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
+using Ambev.DeveloperEvaluation.WebApi.Features.Users.Common;
 using AutoMapper;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
@@ -15,5 +17,13 @@ public class CreateUserProfile : Profile
     {
         CreateMap<CreateUserRequest, CreateUserCommand>().ReverseMap();
         CreateMap<CreateUserResult, CreateUserResponse>().ReverseMap();
+
+        CreateMap<NameRequest, NameCommand>().ReverseMap();
+        CreateMap<AddressRequest, AddressCommand>().ReverseMap();
+        CreateMap<GeolocationRequest, GeolocationCommand>().ReverseMap();
+
+        CreateMap<NameResult, NameResponse>().ReverseMap();
+        CreateMap<AddressResult, AddressResponse>().ReverseMap();
+        CreateMap<GeolocationResult, GeolocationResponse>().ReverseMap();
     }
 }

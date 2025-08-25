@@ -3,6 +3,7 @@ using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Validation;
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
 
@@ -10,7 +11,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities;
 /// Represents a user in the system with authentication and profile information.
 /// This entity follows domain-driven design principles and includes business rules validation.
 /// </summary>
-public class User : BaseEntity, IUser
+public sealed class User : BaseEntity, IUser
 {
     /// <summary>
     /// Initializes a new instance of the User class.
@@ -18,13 +19,8 @@ public class User : BaseEntity, IUser
     public User()
     {
         CreatedAt = DateTime.UtcNow;
+        Address = new Address();
     }
-
-    /// <summary>
-    /// Gets the user's full name.
-    /// Must not be null or empty and should contain both first and last names.
-    /// </summary>
-    public string Username { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets the user's email address.
@@ -33,10 +29,10 @@ public class User : BaseEntity, IUser
     public string Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets the user's phone number.
-    /// Must be a valid phone number format following the pattern (XX) XXXXX-XXXX.
+    /// Gets the user's full name.
+    /// Must not be null or empty and should contain both first and last names.
     /// </summary>
-    public string Phone { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets the hashed password for authentication.
@@ -46,16 +42,27 @@ public class User : BaseEntity, IUser
     public string Password { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets the user's role in the system.
-    /// Determines the user's permissions and access levels.
+    /// Gets the user's full name as a value object.
     /// </summary>
-    public UserRole Role { get; set; }
+    public Name Name { get; set; } = new Name(string.Empty, string.Empty);
+
+    /// <summary>
+    /// Gets the user's phone number.
+    /// Must be a valid phone number format following the pattern (XX) XXXXX-XXXX.
+    /// </summary>
+    public string Phone { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets the user's current status.
     /// Indicates whether the user is active, inactive, or blocked in the system.
     /// </summary>
     public UserStatus Status { get; set; }
+
+    /// <summary>
+    /// Gets the user's role in the system.
+    /// Determines the user's permissions and access levels.
+    /// </summary>
+    public UserRole Role { get; set; }
 
     /// <summary>
     /// Gets the date and time when the user was created.
@@ -84,6 +91,12 @@ public class User : BaseEntity, IUser
     /// </summary>
     /// <returns>The user's role as a string.</returns>
     string IUser.Role => Role.ToString();
+
+    #region Navigations
+
+    public Address Address { get; set; }
+
+    #endregion
 
     /// <summary>
     /// Performs validation of the user entity using the UserValidator rules.
