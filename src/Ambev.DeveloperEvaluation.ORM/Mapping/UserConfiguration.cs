@@ -29,7 +29,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.CreatedAt).IsRequired().HasColumnType("timestamptz");
         builder.Property(u => u.UpdatedAt).IsRequired(false).HasColumnType("timestamptz");
 
-        #region Foreign key to table.
+        #region Relationships
 
         builder
             .HasOne(u => u.Address)
