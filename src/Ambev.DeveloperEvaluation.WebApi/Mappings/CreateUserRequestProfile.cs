@@ -8,7 +8,6 @@ public class CreateUserRequestProfile : Profile
 {
     public CreateUserRequestProfile()
     {
-        // TODO: revisar o uso destes mapeamentos aqui (se já existem mapeamento em cada operação no CQRS).
         CreateMap<AuthenticateUserRequest, AuthenticateUserCommand>();
         CreateMap<AuthenticateUserResult, AuthenticateUserResponse>();
     }
