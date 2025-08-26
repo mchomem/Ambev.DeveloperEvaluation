@@ -8,10 +8,10 @@ namespace Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 /// <summary>
 /// Validator for CreateUserCommand that defines validation rules for user creation command.
 /// </summary>
-public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+public class CreateUserValidator : AbstractValidator<CreateUserCommand>
 {
     /// <summary>
-    /// Initializes a new instance of the CreateUserCommandValidator with defined validation rules.
+    /// Initializes a new instance of the CreateUserValidator with defined validation rules.
     /// </summary>
     /// <remarks>
     /// Validation rules include:
@@ -24,7 +24,7 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     /// - Status: Cannot be set to Unknown
     /// - Role: Cannot be set to None
     /// </remarks>
-    public CreateUserCommandValidator()
+    public CreateUserValidator()
     {
         RuleFor(user => user.Email).SetValidator(new EmailValidator());
         RuleFor(user => user.Username).NotEmpty().Length(3, 50);

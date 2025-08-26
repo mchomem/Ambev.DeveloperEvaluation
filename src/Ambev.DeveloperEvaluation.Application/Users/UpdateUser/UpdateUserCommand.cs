@@ -3,24 +3,17 @@ using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using MediatR;
 
-namespace Ambev.DeveloperEvaluation.Application.Users.CreateUser;
+namespace Ambev.DeveloperEvaluation.Application.Users.UpdateUser;
 
 /// <summary>
-/// Command for creating a new user.
+/// Command for updating a user
 /// </summary>
-/// <remarks>
-/// This command is used to capture the required data for creating a user, 
-/// including username, password, phone number, email, status, and role. 
-/// It implements <see cref="IRequest{TResponse}"/> to initiate the request 
-/// that returns a <see cref="CreateUserResult"/>.
-/// 
-/// The data provided in this command is validated using the 
-/// <see cref="CreateUserValidator"/> which extends 
-/// <see cref="AbstractValidator{T}"/> to ensure that the fields are correctly 
-/// populated and follow the required rules.
-/// </remarks>
-public class CreateUserCommand : IRequest<CreateUserResult>
+public class UpdateUserCommand : IRequest<UpdateUserResult>
 {
+    /// <summary>
+    /// The unique identifier of the user to delete
+    /// </summary>
+    public Guid Id { get; set; }
     /// <summary>
     /// Gets or sets the email address for the user.
     /// </summary>
@@ -39,17 +32,17 @@ public class CreateUserCommand : IRequest<CreateUserResult>
     /// <summary>
     /// Gets or sets the name details for the user.
     /// </summary>
-    public NameCommand Name { get; set; } = new ();
+    public NameCommand Name { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the address details for the user.
     /// </summary>
-    public AddressCommand Address { get; set; } = new ();
+    public AddressCommand Address { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the phone number for the user.
     /// </summary>
-    public string Phone { get; set; } = string.Empty;    
+    public string Phone { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the status of the user.
@@ -63,7 +56,7 @@ public class CreateUserCommand : IRequest<CreateUserResult>
 
     public ValidationResultDetail Validate()
     {
-        var validator = new CreateUserValidator();
+        var validator = new UpdateUserValidator();
         var result = validator.Validate(this);
 
         return new ValidationResultDetail

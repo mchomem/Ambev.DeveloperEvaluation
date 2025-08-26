@@ -77,6 +77,7 @@ public class UserRepository : IUserRepository
     {
         var result = await _context.Users
             .Include(u => u.Address)
+            .AsNoTracking()
             .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
         return result;
     }
