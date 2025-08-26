@@ -1,6 +1,5 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.ListUsers
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.ListUsers;
+
+public class ListUsersResponse
 {
-    public class ListUsersResponse
-    {
-    }
 }

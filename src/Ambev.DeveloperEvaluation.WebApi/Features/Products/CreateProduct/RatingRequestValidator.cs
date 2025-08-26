@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
+
+public class RatingRequestValidator : AbstractValidator<RatingRequest>
 {
-    public class RatingRequestValidator : AbstractValidator<RatingRequest>
+    public RatingRequestValidator()
     {
-        public RatingRequestValidator()
-        {
-            RuleFor(r => r.Rate).InclusiveBetween(0, 5);
-            RuleFor(r => r.Count).GreaterThanOrEqualTo(0);
-        }
+        RuleFor(r => r.Rate).InclusiveBetween(0, 5);
+        RuleFor(r => r.Count).GreaterThanOrEqualTo(0);
     }
 }

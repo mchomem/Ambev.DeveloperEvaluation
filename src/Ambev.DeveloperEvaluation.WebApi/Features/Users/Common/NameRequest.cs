@@ -1,8 +1,7 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.Common
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.Common;
+
+public class NameRequest
 {
-    public class NameRequest
-    {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-    }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
 }

@@ -6,12 +6,7 @@ public class AuthenticateUserValidator : AbstractValidator<AuthenticateUserComma
 {
     public AuthenticateUserValidator()
     {
-        RuleFor(x => x.Email)
-            .NotEmpty()
-            .EmailAddress();
-
-        RuleFor(x => x.Password)
-            .NotEmpty()
-            .MinimumLength(6);
+        RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        RuleFor(x => x.Password).NotEmpty().MinimumLength(6);
     }
 }

@@ -1,51 +1,50 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.Common;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.DeleteUser
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.DeleteUser;
+
+/// <summary>
+/// API response model for DeleteUser operation
+/// </summary>
+public class DeleteUserResponse
 {
     /// <summary>
-    /// API response model for DeleteUser operation
+    /// The unique identifier of the created user
     /// </summary>
-    public class DeleteUserResponse
-    {
-        /// <summary>
-        /// The unique identifier of the created user
-        /// </summary>
-        public Guid Id { get; set; }
+    public Guid Id { get; set; }
 
-        /// <summary>
-        /// The user's email address
-        /// </summary>
-        public string Email { get; set; } = string.Empty;
+    /// <summary>
+    /// The user's email address
+    /// </summary>
+    public string Email { get; set; } = string.Empty;
 
-        /// <summary>
-        /// The username chosen by the user
-        /// </summary>
-        public string Username { get; set; } = string.Empty;
+    /// <summary>
+    /// The username chosen by the user
+    /// </summary>
+    public string Username { get; set; } = string.Empty;
 
-        /// <summary>
-        /// The user's full name
-        /// </summary>
-        public NameResponse Name { get; set; } = new();
+    /// <summary>
+    /// The user's full name
+    /// </summary>
+    public NameResponse Name { get; set; } = new();
 
-        /// <summary>
-        /// The Address details of the user
-        /// </summary>
-        public AddressResponse Address { get; set; } = new();
+    /// <summary>
+    /// The Address details of the user
+    /// </summary>
+    public AddressResponse Address { get; set; } = new();
 
-        /// <summary>
-        /// The user's phone number
-        /// </summary>
-        public string Phone { get; set; } = string.Empty;
+    /// <summary>
+    /// The user's phone number
+    /// </summary>
+    public string Phone { get; set; } = string.Empty;
 
-        /// <summary>
-        /// The user's role in the system
-        /// </summary>
-        public UserRole Role { get; set; }
+    /// <summary>
+    /// The user's role in the system
+    /// </summary>
+    public UserRole Role { get; set; }
 
-        /// <summary>
-        /// The current status of the user
-        /// </summary>
-        public UserStatus Status { get; set; }
-    }
+    /// <summary>
+    /// The current status of the user
+    /// </summary>
+    public UserStatus Status { get; set; }
 }
