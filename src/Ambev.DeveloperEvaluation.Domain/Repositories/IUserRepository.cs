@@ -35,7 +35,7 @@ public interface IUserRepository
     /// Retrieves all user (with Address) records from the repository
     /// </summary>
     /// <returns></returns>
-    Task<IEnumerable<User>> GetAllAsync();    
+    IQueryable<User> GetAll();
 
     /// <summary>
     /// Retrieves a user by their unique identifier
@@ -51,5 +51,5 @@ public interface IUserRepository
     /// <param name="email">The email address to search for</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The user if found, null otherwise</returns>
-    Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);    
+    Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
 }

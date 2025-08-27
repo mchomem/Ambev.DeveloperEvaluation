@@ -1,16 +1,17 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Application.Users.DeleteUser;
 using Ambev.DeveloperEvaluation.Application.Users.GetUser;
+using Ambev.DeveloperEvaluation.Application.Users.ListUsers;
 using Ambev.DeveloperEvaluation.Application.Users.UpdateUser;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.DeleteUser;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
+using Ambev.DeveloperEvaluation.WebApi.Features.Users.ListUsers;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.UpdateUser;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Users;
 
@@ -33,6 +34,26 @@ public class UsersController : BaseController
     {
         _mediator = mediator;
         _mapper = mapper;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(PaginatedResponse<ListUsersResult>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAllAsync([FromQuery] ListUsersRequest request, CancellationToken cancellationToken)
+    {
+        // monta o Command a partir do Request
+        var cmd = _mapper.Map<ListUsersCommand>(request);
+
+        // coleta filtros dinâmicos (tudo que não começa com "_")
+        cmd.Options.Filters = HttpContext.Request.Query
+            .Where(kv => !kv.Key.StartsWith("_"))
+            .ToDictionary(kv => kv.Key, kv => kv.Value.ToString());
+
+        var page = await _mediator.Send(cmd, cancellationToken);
+
+        // envelopa no contrato da API
+        return Ok(PaginatedResponse<ListUsersResult>.FromPaginatedList(page));
     }
 
     /// <summary>
@@ -123,6 +144,13 @@ public class UsersController : BaseController
         });
     }
 
+    /// <summary>
+    /// Updates a user
+    /// </summary>
+    /// <param name="id">The unique identifier of the user to udpate</param>
+    /// <param name="request">The user update request</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns></returns>
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ApiResponseWithData<UpdateUserResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -130,8 +158,8 @@ public class UsersController : BaseController
     public async Task<IActionResult> UpdateUserAsync([FromRoute] Guid id, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
     {
         var validator = new UpdateUserRequestValidator();
-        
-        if(id != request.Id)
+
+        if (id != request.Id)
             return BadRequest("ID in route does not match ID in body");
 
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
@@ -141,7 +169,7 @@ public class UsersController : BaseController
         var command = _mapper.Map<UpdateUserCommand>(request);
         var response = await _mediator.Send(command, cancellationToken);
 
-        return Ok( new ApiResponseWithData<UpdateUserResponse>
+        return Ok(new ApiResponseWithData<UpdateUserResponse>
         {
             Success = true,
             Message = "User updated successfully",

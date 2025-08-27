@@ -58,12 +58,12 @@ public class UserRepository : IUserRepository
     /// Retrieves all user (with Address) records from the repository
     /// </summary>
     /// <returns></returns>
-    public async Task<IEnumerable<User>> GetAllAsync()
+    public IQueryable<User> GetAll()
     {
-        var users = await _context.Users
+        var users = _context.Users
             .Include(u => u.Address)
-            .AsNoTracking()
-            .ToListAsync();
+            .AsNoTracking();
+            
         return users;
     }
 
