@@ -42,17 +42,29 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllAsync([FromQuery] ListUsersRequest request, CancellationToken cancellationToken)
     {
-        // monta o Command a partir do Request
         var cmd = _mapper.Map<ListUsersCommand>(request);
 
-        // coleta filtros dinâmicos (tudo que não começa com "_")
-        cmd.Options.Filters = HttpContext.Request.Query
-            .Where(kv => !kv.Key.StartsWith("_"))
-            .ToDictionary(kv => kv.Key, kv => kv.Value.ToString());
+        // Coleta e processa os filtros
+        var filters = HttpContext.Request.Query
+            .Where(kv => !kv.Key.StartsWith("_") ||
+                         kv.Key.StartsWith("_min") ||
+                         kv.Key.StartsWith("_max"))
+            .ToDictionary(kv => kv.Key, kv =>
+            {
+                // Se for um filtro de data, converte para UTC
+                if ((kv.Key.Contains("CreatedAt") || kv.Key.Contains("UpdatedAt")) 
+                    && DateTime.TryParse(kv.Value.ToString(), out DateTime dateValue))
+                {
+                    var dateUTC = DateTime.SpecifyKind(dateValue, DateTimeKind.Utc).ToString("o");
+                    return dateUTC;
+                }
+
+                return kv.Value.ToString();
+            });
+
+        cmd.Options.Filters = filters;
 
         var page = await _mediator.Send(cmd, cancellationToken);
-
-        // envelopa no contrato da API
         return Ok(PaginatedResponse<ListUsersResult>.FromPaginatedList(page));
     }
 
