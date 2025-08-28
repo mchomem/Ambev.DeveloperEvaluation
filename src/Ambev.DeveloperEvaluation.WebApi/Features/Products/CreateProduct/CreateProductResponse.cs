@@ -1,4 +1,6 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
+﻿using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
+
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
 
 public class CreateProductResponse
 {

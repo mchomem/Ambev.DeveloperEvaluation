@@ -1,4 +1,4 @@
-﻿namespace Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
+﻿namespace Ambev.DeveloperEvaluation.Application.Products.Common;
 
 public class RatingCommand
 {

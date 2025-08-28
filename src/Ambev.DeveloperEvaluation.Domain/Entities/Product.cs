@@ -17,8 +17,8 @@ public sealed class Product : BaseEntity
     public string Description { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
 
     #region Value Objects
 
@@ -27,7 +27,7 @@ public sealed class Product : BaseEntity
     public void SetRating(decimal rate, int count)
     {
         Rating = new Rating(rate, count);
-        UpdatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTimeOffset.UtcNow;
     }
 
     #endregion
