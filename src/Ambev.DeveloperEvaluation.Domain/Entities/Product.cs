@@ -9,7 +9,7 @@ public sealed class Product : BaseEntity
 {
     public Product()
     {
-        CreatedAt = DateTime.UtcNow;
+        CreatedAt = DateTimeOffset.UtcNow;
     }
 
     public string Title { get; set; } = string.Empty;

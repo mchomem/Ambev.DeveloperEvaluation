@@ -18,7 +18,7 @@ public sealed class User : BaseEntity, IUser
     /// </summary>
     public User()
     {
-        CreatedAt = DateTime.UtcNow;
+        CreatedAt = DateTimeOffset.UtcNow;
         Address = new Address();
     }
 
