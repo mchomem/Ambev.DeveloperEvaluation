@@ -20,16 +20,13 @@ public class ProductRepository : IProductRepository
         return product;
     }
 
-    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Product> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var product = await GetByIdAsync(id, cancellationToken);
 
-        if (product == null)
-            return false;
-
         _context.Products.Remove(product);
         await _context.SaveChangesAsync(cancellationToken);
-        return true;
+        return _context.Entry(product).Entity;
     }
 
     public async Task<IEnumerable<Product>> GetAllAsync()
@@ -59,6 +56,7 @@ public class ProductRepository : IProductRepository
     public async Task<IEnumerable<Product>> GetProductsBySpecificCategoryAsync(string category, CancellationToken cancellationToken = default)
     {
         var products = await _context.Products
+            .AsNoTracking()
             .Where(x => x.Category == category)
             .ToListAsync();
         return products;

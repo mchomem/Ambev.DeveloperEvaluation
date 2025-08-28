@@ -15,8 +15,8 @@ public class DeleteUserProfile : Profile
     /// </summary>
     public DeleteUserProfile()
     {
-        CreateMap<Guid, Application.Users.DeleteUser.DeleteUserCommand>()
-            .ConstructUsing(id => new Application.Users.DeleteUser.DeleteUserCommand(id));
+        CreateMap<Guid, DeleteUserCommand>()
+            .ConstructUsing(id => new DeleteUserCommand(id));
 
         CreateMap<DeleteUserResult, DeleteUserResponse>().ReverseMap();
         CreateMap<NameResult, NameResponse>().ReverseMap();

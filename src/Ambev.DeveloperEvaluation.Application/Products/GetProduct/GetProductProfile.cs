@@ -6,7 +6,7 @@ using AutoMapper;
 namespace Ambev.DeveloperEvaluation.Application.Products.GetProduct;
 
 /// <summary>
-/// Profile for mapping between User entity and GetProductResponse
+/// Profile for mapping between Product entity and GetProductResponse
 /// </summary>
 public class GetProductProfile : Profile
 {
@@ -15,7 +15,7 @@ public class GetProductProfile : Profile
     /// </summary>
     public GetProductProfile()
     {
-        CreateMap<Product, GetProductResult>();
-        CreateMap<Rating, RatingResult>();
+        CreateMap<Product, GetProductResult>().ReverseMap();
+        CreateMap<Rating, RatingResult>().ReverseMap();
     }
 }
