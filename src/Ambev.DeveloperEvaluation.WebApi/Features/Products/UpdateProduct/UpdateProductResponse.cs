@@ -1,11 +1,11 @@
-﻿using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.UpdateProduct;
 
 /// <summary>
-/// API response model for CreateProduct operation
+/// API response model for UpdateProduct operation
 /// </summary>
-public class CreateProductResponse
+public class UpdateProductResponse
 {
     /// <summary>
     /// The unique identifier of the updated product

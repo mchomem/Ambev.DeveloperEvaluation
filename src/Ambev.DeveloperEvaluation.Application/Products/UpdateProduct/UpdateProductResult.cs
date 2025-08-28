@@ -1,44 +1,41 @@
-﻿using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
+using Ambev.DeveloperEvaluation.Application.Products.Common;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
+namespace Ambev.DeveloperEvaluation.Application.Products.UpdateProduct;
 
-/// <summary>
-/// API response model for CreateProduct operation
-/// </summary>
-public class CreateProductResponse
+public class UpdateProductResult
 {
     /// <summary>
-    /// The unique identifier of the updated product
+    /// Gets or sets the unique identifier of the updated product
     /// </summary>
     public Guid Id { get; set; }
-
+    
     /// <summary>
     /// Gets or sets the title of the product
     /// </summary>
     public string Title { get; set; } = string.Empty;
-
+    
     /// <summary>
     /// Gets or sets the price of the product
     /// </summary>
     public decimal Price { get; set; }
-
+    
     /// <summary>
     /// Gets or sets the description of the product
     /// </summary>
     public string Description { get; set; } = string.Empty;
-
+    
     /// <summary>
     /// Gets or sets the category of the product
     /// </summary>
     public string Category { get; set; } = string.Empty;
-
+    
     /// <summary>
     /// Gets or sets the image URL of the product
     /// </summary>
     public string Image { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the rating information of the product
+    /// Gets or sets the date rating
     /// </summary>
-    public RatingResponse Rating { get; set; } = new();
+    public RatingResult Rating { get; set; } = new();
 }

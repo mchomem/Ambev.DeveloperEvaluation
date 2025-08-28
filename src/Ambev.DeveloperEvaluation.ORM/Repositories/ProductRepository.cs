@@ -49,7 +49,9 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await _context.Products.FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
+        var result = await _context.Products
+            .AsNoTracking()
+            .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
         return result;
     }
 

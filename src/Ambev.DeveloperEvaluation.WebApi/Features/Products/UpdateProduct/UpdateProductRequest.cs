@@ -1,14 +1,14 @@
-﻿using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.UpdateProduct;
 
 /// <summary>
-/// API response model for CreateProduct operation
+/// API request model for UpdateProduct operation
 /// </summary>
-public class CreateProductResponse
+public class UpdateProductRequest
 {
     /// <summary>
-    /// The unique identifier of the updated product
+    /// The unique identifier of the product to update
     /// </summary>
     public Guid Id { get; set; }
 
@@ -40,5 +40,5 @@ public class CreateProductResponse
     /// <summary>
     /// Gets or sets the rating information of the product
     /// </summary>
-    public RatingResponse Rating { get; set; } = new();
+    public RatingRequest Rating { get; set; } = new();
 }
