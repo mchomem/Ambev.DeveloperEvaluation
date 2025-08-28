@@ -1,11 +1,13 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
 using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
+using Ambev.DeveloperEvaluation.Application.Products.ListProducts;
 using Ambev.DeveloperEvaluation.Application.Products.UpdateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.DeleteProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.GetProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.ListProducts;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.UpdateProduct;
 using AutoMapper;
 using MediatR;
@@ -13,17 +15,57 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
-[Route("api/[controller]")]
+/// <summary>
+/// Controller for managing product operations
+/// </summary>
 [ApiController]
+[Route("api/[controller]")]
 public class ProductsController : BaseController
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Initializes a new instance of ProductsController
+    /// </summary>
+    /// <param name="mediator">The mediator instance</param>
+    /// <param name="mapper">The AutoMapper instance</param>
     public ProductsController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(PaginatedResponse<ListProductsResult>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAllAsync([FromQuery] ListProductsRequest request, CancellationToken cancellationToken)
+    {
+        var cmd = _mapper.Map<ListProductsCommand>(request);
+
+        // Coleta e processa os filtros
+        var filters = HttpContext.Request.Query
+            .Where(kv => !kv.Key.StartsWith("_") ||
+                         kv.Key.StartsWith("_min") ||
+                         kv.Key.StartsWith("_max"))
+            .ToDictionary(kv => kv.Key, kv =>
+            {
+                // Se for um filtro de data, converte para UTC
+                if ((kv.Key.Contains("CreatedAt") || kv.Key.Contains("UpdatedAt"))
+                    && DateTime.TryParse(kv.Value.ToString(), out DateTime dateValue))
+                {
+                    var dateUTC = DateTime.SpecifyKind(dateValue, DateTimeKind.Utc).ToString("o");
+                    return dateUTC;
+                }
+
+                return kv.Value.ToString();
+            });
+
+        cmd.Options.Filters = filters;
+
+        var page = await _mediator.Send(cmd, cancellationToken);
+        return Ok(PaginatedResponse<ListProductsResult>.FromPaginatedList(page));
     }
 
     [HttpGet("{id}")]

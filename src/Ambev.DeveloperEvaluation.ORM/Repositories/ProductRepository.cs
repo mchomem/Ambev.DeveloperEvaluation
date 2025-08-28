@@ -29,11 +29,9 @@ public class ProductRepository : IProductRepository
         return _context.Entry(product).Entity;
     }
 
-    public async Task<IEnumerable<Product>> GetAllAsync()
+    public IQueryable<Product> GetAll()
     {
-        var products = await _context.Products
-            .AsNoTracking()
-            .ToListAsync();
+        var products = _context.Products.AsNoTracking();
         return products;
     }
 
