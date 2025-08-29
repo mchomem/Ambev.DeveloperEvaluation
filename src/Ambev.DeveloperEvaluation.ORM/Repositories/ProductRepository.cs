@@ -47,17 +47,17 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await _context.Products
+        var product = await _context.Products
             .AsNoTracking()
-            .FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
-        return result;
+            .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+        return product;
     }
 
     public async Task<IEnumerable<Product>> GetProductsBySpecificCategoryAsync(string category, CancellationToken cancellationToken = default)
     {
         var products = await _context.Products
             .AsNoTracking()
-            .Where(x => x.Category == category)
+            .Where(p => p.Category == category)
             .ToListAsync();
         return products;
     }

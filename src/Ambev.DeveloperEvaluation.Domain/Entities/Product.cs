@@ -32,6 +32,12 @@ public sealed class Product : BaseEntity
 
     #endregion
 
+    #region Navigation
+
+    public ICollection<CartItem> CartItens { get; set; }
+
+    #endregion
+
     public ValidationResultDetail Validate()
     {
         var validator = new ProductValidatior();

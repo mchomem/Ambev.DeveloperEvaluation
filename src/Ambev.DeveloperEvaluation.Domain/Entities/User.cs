@@ -95,6 +95,7 @@ public sealed class User : BaseEntity, IUser
     #region Navigations
 
     public Address Address { get; set; }
+    public ICollection<Cart> Carts { get; set; }
 
     #endregion
 
