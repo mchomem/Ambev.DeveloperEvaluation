@@ -3,7 +3,6 @@ using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace Ambev.DeveloperEvaluation.Application.Carts.CreateCart;
 
@@ -35,15 +34,17 @@ public class CreateCartHandler : IRequestHandler<CreateCartCommand, CreateCartRe
         if (user is null)
             throw new KeyNotFoundException($"User with ID {command.UserId} not found");
 
-        foreach (var product in command.Products)
-        {
-            var existingProduct = await _productRepository.GetByIdAsync(product.ProductId);
+        var productIds = command.Products.Select(product => product.ProductId);
 
-            if(existingProduct is null)
-                throw new KeyNotFoundException($"Product with ID {product.ProductId} not found");
+        foreach (var productId in productIds)
+        {
+            var existingProduct = await _productRepository.GetByIdAsync(productId);
+
+            if (existingProduct is null)
+                throw new KeyNotFoundException($"Product with ID {productId} not found");
         }
 
-        // TODO: por enquanto deixar as regras de compras aqui, verificar odne colocar na solution.
+        // TODO: por enquanto deixar as regras de compras aqui.
 
         var cart = _mapper.Map<Cart>(command);
         cart.User = user;
