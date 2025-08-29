@@ -1,8 +1,12 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Carts.CreateCart;
+using Ambev.DeveloperEvaluation.Application.Carts.DeleteCart;
 using Ambev.DeveloperEvaluation.Application.Carts.GetCart;
+using Ambev.DeveloperEvaluation.Application.Users.DeleteUser;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Cart.CreateCart;
+using Ambev.DeveloperEvaluation.WebApi.Features.Cart.DeleteCart;
 using Ambev.DeveloperEvaluation.WebApi.Features.Cart.GetCart;
+using Ambev.DeveloperEvaluation.WebApi.Features.Users.DeleteUser;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -64,6 +68,30 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Cart
                 Success = true,
                 Message = "Cart created successfully",
                 Data = _mapper.Map<CreateCartResponse>(response)
+            });
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ApiResponseWithData<DeleteCartResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteUserAsync([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var request = new DeleteCartRequest { Id = id };
+            var validator = new DeleteCartRequestValidator();
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
+            var command = _mapper.Map<DeleteCartCommand>(request.Id);
+            var response = await _mediator.Send(command, cancellationToken);
+
+            return Ok(new ApiResponseWithData<DeleteCartResponse>
+            {
+                Success = true,
+                Message = "Cart deleted successfully",
+                Data = _mapper.Map<DeleteCartResponse>(response)
             });
         }
     }

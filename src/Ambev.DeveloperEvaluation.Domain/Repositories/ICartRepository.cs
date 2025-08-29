@@ -9,5 +9,4 @@ public interface ICartRepository
     Task<Cart> CreateAsync(Cart cart, CancellationToken cancellationToken = default);
     Task<Cart> UpdateAsync(Cart cart, CancellationToken cancellationToken = default);
     Task<Cart> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
-    IQueryable<CartItem> GetAllCartItemsByCartId(Guid cartId);
 }

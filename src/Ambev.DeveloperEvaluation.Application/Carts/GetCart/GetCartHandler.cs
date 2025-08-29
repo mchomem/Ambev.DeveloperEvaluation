@@ -29,9 +29,6 @@ public class GetCartHandler : IRequestHandler<GetCartCommand, GetCartResult>
         if (cart == null)
             throw new KeyNotFoundException($"Cart with ID {request.Id} not found");
 
-        var cartItems = _cartRepository.GetAllCartItemsByCartId(cart.Id).ToList();
-        cart.CartItens = cartItems;
-
         return _mapper.Map<GetCartResult>(cart);
     }
 }

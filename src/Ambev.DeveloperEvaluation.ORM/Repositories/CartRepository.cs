@@ -24,8 +24,17 @@ public class CartRepository : ICartRepository
     public async Task<Cart> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var cart = await GetByIdAsync(id, cancellationToken);
-        _context.CartItems.RemoveRange(cart.CartItens);
+
+        if (cart is null)
+            return null!;
+
+        if (cart.CartItens is not null)
+        {
+            _context.CartItems.RemoveRange(cart.CartItens);
+        }
+        
         _context.Carts.Remove(cart);
+        await _context.SaveChangesAsync(cancellationToken);
         return cart;
     }
 
@@ -39,7 +48,7 @@ public class CartRepository : ICartRepository
     {
         var cart = await _context.Carts
             .Include(c => c.User)
-            .AsNoTracking()
+            .Include(c => c.CartItens)
             .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 
         return cart;
@@ -50,15 +59,5 @@ public class CartRepository : ICartRepository
         _context.Carts.Update(cart);
         await _context.SaveChangesAsync(cancellationToken);
         return cart;
-    }
-
-    public IQueryable<CartItem> GetAllCartItemsByCartId(Guid cartId)
-    {
-        var cartItems = _context.CartItems
-            .Include(ci => ci.Product)
-            .Where(ci => ci.CartId == cartId)
-            .AsNoTracking();
-
-        return cartItems;
     }
 }

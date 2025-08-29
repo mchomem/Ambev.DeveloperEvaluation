@@ -9,6 +9,9 @@ public class GetCartProfile : Profile
 {
     public GetCartProfile()
     {
+        CreateMap<Guid, GetCartCommand>()
+            .ConstructUsing(id => new GetCartCommand(id));
+
         CreateMap<GetCartRequest, GetCartCommand>().ReverseMap();
         CreateMap<GetCartResult, GetCartResponse>().ReverseMap();
 
