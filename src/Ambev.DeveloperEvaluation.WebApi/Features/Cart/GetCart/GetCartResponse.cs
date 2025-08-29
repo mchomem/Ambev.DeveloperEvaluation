@@ -1,8 +1,8 @@
 ﻿using Ambev.DeveloperEvaluation.WebApi.Features.Cart.Common;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Cart.CreateCart;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Cart.GetCart;
 
-public class CreateCartResponse
+public class GetCartResponse
 {
     public Guid Id { get; set; }
     public int SaleNumber { get; set; }

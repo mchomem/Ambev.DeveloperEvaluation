@@ -1,8 +1,8 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Carts.Common;
 
-namespace Ambev.DeveloperEvaluation.Application.Carts.CreateCart;
+namespace Ambev.DeveloperEvaluation.Application.Carts.GetCart;
 
-public class CreateCartResult
+public class GetCartResult
 {
     public Guid Id { get; set; }
     public int SaleNumber { get; set; }
