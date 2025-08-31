@@ -15,6 +15,7 @@ public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
         builder.Property(ci => ci.CartId).IsRequired().HasColumnType("uuid");
         builder.Property(ci => ci.ProductId).IsRequired().HasColumnType("uuid");
         builder.Property(ci => ci.Quantity).IsRequired().HasColumnType("integer");
+        builder.Property(ci => ci.UnitPrice).IsRequired().HasColumnType("decimal(18,2)");
 
         #region Relationships
 

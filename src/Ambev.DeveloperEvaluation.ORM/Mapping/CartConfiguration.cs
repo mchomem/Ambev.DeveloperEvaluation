@@ -14,13 +14,15 @@ public class CartConfiguration : IEntityTypeConfiguration<Cart>
         builder.Property(c => c.Id).HasColumnType("uuid").HasDefaultValueSql("gen_random_uuid()");
         builder.Property(c => c.UserId).IsRequired().HasColumnType("uuid");
         builder
-            .Property(c => c.SaleNumber) // Ciente de que em um cenário real, o número da venda é controlado por um gerenciador de sequência de documentos fiscais.
+            .Property(c => c.SaleNumber) // Nota: em um cenário real, o número da venda é controlado por um gerenciador de sequência de documentos fiscais.
             .IsRequired()
             .HasColumnType("integer")
             .ValueGeneratedOnAdd()
             .UseIdentityColumn();
 
         builder.Property(c => c.Date).IsRequired().HasColumnType("timestamptz");
+        builder.Property(c => c.TotalSale).IsRequired().HasColumnType("decimal(18,2)");
+        builder.Property(c => c.TotalSaleDiscount).IsRequired().HasColumnType("decimal(18,2)");
 
         #region Relationships
 

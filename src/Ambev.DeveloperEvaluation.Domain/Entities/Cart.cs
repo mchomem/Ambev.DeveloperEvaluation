@@ -11,6 +11,8 @@ public sealed class Cart
     public Guid UserId { get; set; }
     public int SaleNumber { get; set; }
     public DateTimeOffset Date { get; set; }
+    public decimal TotalSale { get; set; }
+    public decimal TotalSaleDiscount { get; set; }
 
     #region Navigation
 
