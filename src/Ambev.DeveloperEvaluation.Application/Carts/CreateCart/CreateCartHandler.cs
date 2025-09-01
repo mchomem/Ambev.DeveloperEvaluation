@@ -34,20 +34,88 @@ public class CreateCartHandler : IRequestHandler<CreateCartCommand, CreateCartRe
         if (user is null)
             throw new KeyNotFoundException($"User with ID {command.UserId} not found");
 
-        var productIds = command.Products.Select(product => product.ProductId);
+        // Agrupar itens pelo ProductId para calcular descontos corretamente
+        var groupedProducts = command.Products
+            .GroupBy(p => p.ProductId)
+            .Select(g => new 
+            { 
+                ProductId = g.Key, 
+                TotalQuantity = g.Sum(p => p.Quantity) 
+            })
+            .ToList();
 
-        foreach (var productId in productIds)
+        // Verificar limite máximo de itens por produto
+        foreach (var group in groupedProducts)
         {
-            var existingProduct = await _productRepository.GetByIdAsync(productId);
-
-            if (existingProduct is null)
-                throw new KeyNotFoundException($"Product with ID {productId} not found");
+            if (group.TotalQuantity > 20)
+                throw new InvalidOperationException($"You cannot sell more than 20 items of the same product. Product ID: {group.ProductId} has {group.TotalQuantity} items.");
         }
 
-        // TODO: por enquanto deixar as regras de compras aqui.
-
+        // Criar o carrinho e seus itens com preços e descontos calculados
         var cart = _mapper.Map<Cart>(command);
         cart.User = user;
+        cart.Date = DateTimeOffset.UtcNow;
+        
+        // Limpar os itens mapeados automaticamente e criar com as regras de negócio
+        cart.CartItens = new List<CartItem>();
+        
+        decimal totalSale = 0;
+        decimal totalSaleDiscount = 0;
+
+        // Processar cada item do carrinho
+        foreach (var productCommand in command.Products)
+        {
+            var product = await _productRepository.GetByIdAsync(productCommand.ProductId, cancellationToken);
+            
+            if (product is null)
+                throw new KeyNotFoundException($"Product with ID {productCommand.ProductId} not found");
+
+            var quantity = productCommand.Quantity;
+            var unitPrice = product.Price;
+            var totalItemPrice = unitPrice * quantity;
+            
+            // Encontrar a quantidade total deste produto no carrinho para determinar o desconto
+            var totalProductQuantity = groupedProducts
+                .FirstOrDefault(g => g.ProductId == productCommand.ProductId)?.TotalQuantity ?? 0;
+            
+            // Calcular desconto baseado na quantidade total do produto
+            decimal discountPercentage = 0;
+            
+            if (totalProductQuantity >= 10 && totalProductQuantity <= 20)
+            {
+                // 20% de desconto para compras entre 10 e 20 itens
+                discountPercentage = 0.20m;
+            }
+            else if (totalProductQuantity >= 4)
+            {
+                // 10% de desconto para compras com 4 ou mais itens
+                discountPercentage = 0.10m;
+            }
+            
+            decimal itemDiscount = totalItemPrice * discountPercentage;
+            decimal finalItemPrice = totalItemPrice - itemDiscount;
+            
+            // Adicionar ao total geral
+            totalSale += totalItemPrice;
+            totalSaleDiscount += itemDiscount;
+            
+            // Criar o item do carrinho
+            var cartItem = new CartItem
+            {
+                CartId = cart.Id,
+                ProductId = product.Id,
+                Product = product,
+                Quantity = quantity,
+                UnitPrice = unitPrice
+            };
+            
+            cart.CartItens.Add(cartItem);
+        }
+        
+        // Atualizar totais do carrinho
+        cart.TotalSale = totalSale;
+        cart.TotalSaleDiscount = totalSaleDiscount;
+        
         var createdCart = await _cartRepository.CreateAsync(cart, cancellationToken);
         var result = _mapper.Map<CreateCartResult>(createdCart);
         return result;

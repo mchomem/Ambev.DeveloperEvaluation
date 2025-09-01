@@ -16,6 +16,18 @@ public class CartRepository : ICartRepository
     public async Task<Cart> CreateAsync(Cart cart, CancellationToken cancellationToken = default)
     {
         _context.Entry(cart.User).State = EntityState.Unchanged;
+
+        if (cart.CartItens != null)
+        {
+            foreach (var item in cart.CartItens)
+            {
+                if (item.Product != null)
+                {
+                    _context.Entry(item.Product).State = EntityState.Unchanged;
+                }
+            }
+        }
+
         await _context.Carts.AddAsync(cart, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
         return cart;
